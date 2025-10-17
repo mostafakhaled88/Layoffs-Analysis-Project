@@ -17,10 +17,10 @@ Layoffs-Analysis-Project/
 │
 ├── layoffs_load.ipynb                # Python notebook for loading and exporting data
 ├── sql/
-│   ├── 01_create_db_and_tables.sql   # Create database, raw & clean tables
-│   ├── 01_creat_tables.sql   # Create raw & clean tables
-│   ├── 02_load_clean_procedure.sql   # ETL procedure for cleaning and standardizing data
-│   └── 03_vw_Layoffs_Dashboard.sql   # Analytics view for Power BI
+│   ├── 01_init_database.sql          # Create database, raw & clean tables
+│   ├── 02_create_tables.sql           # Create raw & clean tables
+│   ├── 03_load_clean_procedure.sql   # ETL procedure for cleaning and standardizing data
+│   └── 04_vw_Layoffs_Dashboard.sql   # Analytics view for Power BI
 │
 ├── data/
 │   └── layoffs.csv                   # Raw dataset (Layoffs.fyi)
