@@ -1,10 +1,10 @@
-# 💼 Layoffs Analysis Project (Python + SQL + Power BI)
+<img width="65" height="21" alt="image" src="https://github.com/user-attachments/assets/9470f31d-eaef-421c-8387-af552fb63c0a" /># 💼 Layoffs Analysis Project (Python + SQL + Power BI)
 
 ## 🧩 Project Overview
 This end-to-end data analytics project analyzes global layoffs between **2020–2024** using the **Layoffs.fyi (Kaggle version)** dataset.  
 
 The goal was to design a complete **data pipeline and dashboard** that turns raw layoff records into meaningful insights using:
-- **Python** for data cleaning and export  
+- **Python** for data load and export  
 - **SQL Server** for transformation, modeling, and aggregation  
 - **Power BI** for visualization and storytelling  
 
@@ -15,9 +15,10 @@ The goal was to design a complete **data pipeline and dashboard** that turns raw
 ```
 Layoffs-Analysis-Project/
 │
-├── layoffs_load.ipynb                # Python notebook for cleaning and exporting data
+├── layoffs_load.ipynb                # Python notebook for loading and exporting data
 ├── sql/
 │   ├── 01_create_db_and_tables.sql   # Create database, raw & clean tables
+│   ├── 01_creat_tables.sql   # Create raw & clean tables
 │   ├── 02_load_clean_procedure.sql   # ETL procedure for cleaning and standardizing data
 │   └── 03_vw_Layoffs_Dashboard.sql   # Analytics view for Power BI
 │
@@ -34,12 +35,10 @@ Layoffs-Analysis-Project/
 
 ## 🧮 Step 1 — Data Cleaning in Python
 
-The dataset was first loaded and prepared in **`layoffs_load.ipynb`**.
+The dataset was first loaded and exported in **`layoffs_load.ipynb`**.
 
 ### Key Tasks
-- Removed duplicates and null values  
-- Standardized column names  
-- Fixed inconsistent data types  
+- Load layoffs_data.csv
 - Exported cleaned data to CSV for SQL ingestion  
 
 ### Sample Code
@@ -47,18 +46,20 @@ The dataset was first loaded and prepared in **`layoffs_load.ipynb`**.
 import pandas as pd
 
 # Load dataset
-df = pd.read_csv('layoffs.csv')
+import pandas as pd
+import pyodbc
 
-# Clean data
-df.drop_duplicates(inplace=True)
-df['Funds_Raised'] = df['Funds_Raised'].fillna(0)
-df.columns = df.columns.str.strip().str.replace(' ', '_')
+df = pd.read_csv(r"C:\SQLData\layoffs_data.csv")
 
-# Export cleaned data
-df.to_csv('Cleaned_Layoffs_Data.csv', index=False)
-```
+conn = pyodbc.connect(
+    "Driver=ODBC Driver 18 for SQL Server;"
+    "Server=E4-1LNV5DM\\SQLEXPRESS;"
+    "Database=LayoffsDB;"
+    "Trusted_Connection=yes;"
+    "Encrypt=no;"
+)
+cursor = conn.cursor()
 
----
 
 ## 🧱 Step 2 — Data Modeling and ETL in SQL
 
@@ -67,7 +68,7 @@ All data modeling and transformations were handled in **SQL Server**.
 ### ⚙️ Database: `LayoffsDB`
 
 #### 1️⃣ Tables
-- **`dbo.LayoffsRaw`** — contains unprocessed data  
+- **`dbo.LayoffsRaw`** — contains raw data  
 - **`dbo.Layoffs_Clean`** — cleaned, structured table used for reporting  
 
 #### 2️⃣ Stored Procedure: `load_Layoffs_Clean`
@@ -110,7 +111,7 @@ Provide a visual overview of layoffs across companies, countries, and industries
 
 ### Dashboard Pages
 
-#### **Page 1: Global Overview**
+#### **Page : Global Overview**
 - **KPIs**
   - 🧍 Total Laid Off  
   - 🏢 Total Companies Affected  
@@ -120,15 +121,12 @@ Provide a visual overview of layoffs across companies, countries, and industries
   - Layoffs Trend by Month/Year  
   - Top Countries Affected (bar chart)  
   - Top Industries Affected (bar chart)  
-  - Top Companies Affected (bar & pie charts)
+  - Top Companies Affected (pie charts)
 
-#### **Page 2: Industry & Stage Analysis**
-- Layoffs by Industry  
-- Layoffs by Funding Stage  
-- Funds Raised vs. % Workforce Laid Off  
 
-#### **Page 3: Filters & Slicers**
-- Year, Country, Industry, and Stage for flexible exploration  
+
+ Filters & Slicers**
+- Year, month, Country, Industry, and Stage for flexible exploration  
 
 ---
 
@@ -136,7 +134,7 @@ Provide a visual overview of layoffs across companies, countries, and industries
 
 | Tool / Language | Purpose |
 |-----------------|----------|
-| **Python (Pandas)** | Data cleaning & preprocessing |
+| **Python (Pandas)** | Load and expor the data |
 | **SQL Server (T-SQL)** | ETL, data modeling, and view creation |
 | **Power BI** | Dashboard visualization |
 | **Excel / CSV** | Data exchange format |
@@ -151,7 +149,7 @@ Provide a visual overview of layoffs across companies, countries, and industries
    git clone https://github.com/mostafakhaled88/Layoffs-Analysis-Project.git
    ```
 2. **Run the Python notebook**
-   - Open `layoffs_load.ipynb` and export `Cleaned_Layoffs_Data.csv`
+   - Open `layoffs_load.ipynb` load and export layoffs_data.csv`
 3. **Run the SQL scripts**
    - Create the database and load cleaned data
 4. **Open Power BI**
@@ -162,10 +160,10 @@ Provide a visual overview of layoffs across companies, countries, and industries
 
 ## 📈 Key Insights
 
-- **USA** and **India** are the most affected countries  
-- **Tech, Finance, and Healthcare** industries dominate layoffs  
+- **USA** , **India** and **Germany** are the most affected countries  
+- **Retail, Transportation,Infrastructure ,and Consumer** industries dominate layoffs  
 - Layoff spikes occur during **early 2023** and **mid-2022**  
-- Many **Post-IPO** and **well-funded startups** still conducted layoffs  
+- Many **Post-IPO** and **Acquired** are Highest layoffs  
 
 ---
 
