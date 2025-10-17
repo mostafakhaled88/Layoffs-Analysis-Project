@@ -97,7 +97,7 @@ BEGIN
             Laid_Off_Count,
             Percentage,
             Funds_Raised
-        FROM LayoffsRaw
+        FROM Layoffs_Raw
         WHERE 
             Laid_Off_Count > 0 
             AND Percentage > 0;
